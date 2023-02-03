@@ -1,0 +1,65 @@
+[
+  {
+    "objectID": "posts/toothgrowth_analysis/index.html",
+    "href": "posts/toothgrowth_analysis/index.html",
+    "title": "Toothgrowth Analysis",
+    "section": "",
+    "text": "This is the second portion of the Coursera Statistical Inference course project. We will analyze the ToothGrowth data in the R datasets package to determine if the Vitmain C has an effect on tooth growth in guinea pigs."
+  },
+  {
+    "objectID": "posts/toothgrowth_analysis/index.html#loading-toothgrowth-dataset-and-performing-basic-exploratory-data-analyis",
+    "href": "posts/toothgrowth_analysis/index.html#loading-toothgrowth-dataset-and-performing-basic-exploratory-data-analyis",
+    "title": "Toothgrowth Analysis",
+    "section": "1) Loading ToothGrowth dataset and performing basic exploratory data analyis",
+    "text": "1) Loading ToothGrowth dataset and performing basic exploratory data analyis\n\n\nCode\nlibrary(datasets)\ndata(\"ToothGrowth\")\nstr(ToothGrowth)\n\n\n'data.frame':   60 obs. of  3 variables:\n $ len : num  4.2 11.5 7.3 5.8 6.4 10 11.2 11.2 5.2 7 ...\n $ supp: Factor w/ 2 levels \"OJ\",\"VC\": 2 2 2 2 2 2 2 2 2 2 ...\n $ dose: num  0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 ...\n\n\nNeed to convert dose variable\n\n\nCode\nToothGrowth$dose <- as.factor(ToothGrowth$dose)\nstr(ToothGrowth)\n\n\n'data.frame':   60 obs. of  3 variables:\n $ len : num  4.2 11.5 7.3 5.8 6.4 10 11.2 11.2 5.2 7 ...\n $ supp: Factor w/ 2 levels \"OJ\",\"VC\": 2 2 2 2 2 2 2 2 2 2 ...\n $ dose: Factor w/ 3 levels \"0.5\",\"1\",\"2\": 1 1 1 1 1 1 1 1 1 1 ...\n\n\nCode\nhist(ToothGrowth$len, freq = FALSE, ylim = c(0.00, 0.06))\n\ncurve(dnorm(x, mean = mean(ToothGrowth$len), \n            sd = sd(ToothGrowth$len)), add = TRUE, col = \"blue\")"
+  },
+  {
+    "objectID": "posts/toothgrowth_analysis/index.html#basic-summary-of-toothgrowth-dataset",
+    "href": "posts/toothgrowth_analysis/index.html#basic-summary-of-toothgrowth-dataset",
+    "title": "Toothgrowth Analysis",
+    "section": "2) Basic summary of ToothGrowth dataset",
+    "text": "2) Basic summary of ToothGrowth dataset\n\n\nCode\nsummary(ToothGrowth)\n\n\n      len        supp     dose   \n Min.   : 4.20   OJ:30   0.5:20  \n 1st Qu.:13.07   VC:30   1  :20  \n Median :19.25           2  :20  \n Mean   :18.81                   \n 3rd Qu.:25.27                   \n Max.   :33.90                   \n\n\nCode\nlibrary(ggplot2)\nggplot(ToothGrowth, aes(x = supp, y = len)) +\n    geom_boxplot(aes()) +\n    labs(title = \"Tooth Length v. Dose Amount\", \n         x = \"Supplement Type\", y = \"Tooth Length\")\n\n\n\n\n\nCode\nggplot(ToothGrowth, aes(x = dose, y = len)) +\n    geom_boxplot(aes()) +\n    labs(title = \"Tooth Length v. Supplement Type\", \n         x = \"Dose Amount\", y = \"Tooth Length\")"
+  },
+  {
+    "objectID": "posts/toothgrowth_analysis/index.html#using-confidence-interval-and-t-test-to-compare-tooth-growth-by-supp-and-dose",
+    "href": "posts/toothgrowth_analysis/index.html#using-confidence-interval-and-t-test-to-compare-tooth-growth-by-supp-and-dose",
+    "title": "Toothgrowth Analysis",
+    "section": "3) Using Confidence Interval and T-Test to compare tooth growth by supp and dose",
+    "text": "3) Using Confidence Interval and T-Test to compare tooth growth by supp and dose\nIt appears the dataset is fairly normal. With this smaller dataset, we’ll be using T-Test to test if delivery method and/or dose amount affects tooth growth\n\nHypothesis 1: Vitamin C and Orange Juice result in same tooth growth\n\n\nCode\nt.test(len ~ supp, paired = FALSE, var.equal = TRUE, data = ToothGrowth)\n\n\n\n    Two Sample t-test\n\ndata:  len by supp\nt = 1.9153, df = 58, p-value = 0.06039\nalternative hypothesis: true difference in means between group OJ and group VC is not equal to 0\n95 percent confidence interval:\n -0.1670064  7.5670064\nsample estimates:\nmean in group OJ mean in group VC \n        20.66333         16.96333 \n\n\nThe 95% confidence interval includes 0 and the p-value is greater than 0.05 therefore we fail to reject the null hypothesis that vitamin C and orange juice result in the same amount of tooth growth.\n\n\nHypothesis 2: Increasing dose amount results in same tooth growth\n\n\nCode\nTGdose05_1 <- subset(ToothGrowth, dose %in% c(0.5, 1))\nTGdose1_2 <- subset(ToothGrowth, dose %in% c(1, 2))\nTGdose2_05 <- subset(ToothGrowth, dose %in% c(2, 0.5))\n\n#95% Confidence Intervals\nrbind(t.test(len ~ dose, paired = FALSE, var.equal = TRUE, data = TGdose05_1)$conf,\n      t.test(len ~ dose, paired = FALSE, var.equal = TRUE, data = TGdose1_2)$conf,\n      t.test(len ~ dose, paired = FALSE, var.equal = TRUE, data = TGdose2_05)$conf)\n\n\n           [,1]       [,2]\n[1,] -11.983748  -6.276252\n[2,]  -8.994387  -3.735613\n[3,] -18.153519 -12.836481\n\n\nCode\n#P-Values\nrbind(t.test(len ~ dose, paired = FALSE, var.equal = TRUE, data = TGdose05_1)$p.value,\n      t.test(len ~ dose, paired = FALSE, var.equal = TRUE, data = TGdose1_2)$p.value,\n      t.test(len ~ dose, paired = FALSE, var.equal = TRUE, data = TGdose2_05)$p.value)\n\n\n             [,1]\n[1,] 1.266297e-07\n[2,] 1.810829e-05\n[3,] 2.837553e-14\n\n\nAll three 95% confidence intervals do not contain 0 and all three P-Values are essentially 0 therefore we reject the null hypothesis that increasing the dosage will result in the same amount of tooth growth."
+  },
+  {
+    "objectID": "posts/toothgrowth_analysis/index.html#conclusion",
+    "href": "posts/toothgrowth_analysis/index.html#conclusion",
+    "title": "Toothgrowth Analysis",
+    "section": "4) Conclusion",
+    "text": "4) Conclusion\nWorking with the assumptions that the data is iid normal and variance is equal we can conclude that the supplement delivery (vitamin C or orange juice) has no affect on tooth growth. However, increasing dosage amount, regardless of delivery method, appears to result in increase tooth growth"
+  },
+  {
+    "objectID": "posts/Tableau_(GoT)/index.html",
+    "href": "posts/Tableau_(GoT)/index.html",
+    "title": "Tableau Public - Data Visualization - Game of Thrones",
+    "section": "",
+    "text": "This dashboard presents a detailed analysis of deaths in the “Game of Thrones” series, complete with visual representations and statistics. Who is the deadliest character or House and who has fallen victim to them? What is their weapon of choice? Get ready to relive some of the most iconic moments and discover new insights into the grim reality of life in Westeros. Link to dashboard\nThis dashboard was completed for my Fundamentals of Visualization with Tableau course project in Coursera. Data is from #MakoverMonday"
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "Data Visualization\n\n\nTableau\n\n\n\n\n\n\n\n\n\n\n\n\nFeb 1, 2023\n\n\nSachiko Morrison\n\n\n\n\n\n\n  \n\n\n\n\n\n\n\n\n\n\nR\n\n\nanalysis\n\n\nplot\n\n\n\n\n\n\n\n\n\n\n\nJan 31, 2023\n\n\nSachiko Morrison\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Sachiko Morrison",
+    "section": "",
+    "text": "I’m very familiar with R and have expanded my skill set to include SQL and Tableau. I’m no stranger with handling multiple deadlines and being able to pivot my attention to different projects throughout the day without losing my eye for detail. I strive to continually grow my knowledge base and enjoy working with others. I’m always opened to connect with newbies like myself and more seasoned professionals willing to give tips, trick, and advice."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this blog"
+  }
+]

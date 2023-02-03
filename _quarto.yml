@@ -1,0 +1,43 @@
+project:
+  type: website
+  resources: "Sachiko_Morrison_Resume.pdf"
+
+website:
+  title: "Sachiko Morrison"
+  favicon: "DSC06921.jpg"
+  page-footer:
+    center: |
+      [Contact Sachiko Morrison](mailto:sachy345@gmail.com)
+    left: |
+      Made with [Quarto](https://quarto.org/)
+    right: |
+      [Github Code Repo](https://github.com/sachy345)
+    background: "#70527F"
+    
+  navbar:
+    left: 
+      - text: Home
+        href: index.qmd
+      - text: Projects
+        href: projects.qmd
+      - text: Resume
+        href: resume.qmd
+    right:
+      - icon: twitter
+        href: https://twitter.com/sachy345
+      - icon: github
+        href: https://github.com/Sachy345
+      - icon: linkedin
+        href: https://www.linkedin.com/in/sachy345/
+format:
+  html:
+    theme: 
+        light: [cosmo, theme_light.css]
+        dark: [cosmo, theme_dark.css]
+    code-link: false
+    code-fold: show
+    code-tools: false
+    code-block-border-left: "#31BAE9"
+        
+editor: visual
+

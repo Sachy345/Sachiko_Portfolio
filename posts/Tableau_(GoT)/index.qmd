@@ -1,0 +1,23 @@
+---
+title: "Tableau Public - Data Visualization - Game of Thrones"
+author: "Sachiko Morrison"
+date: "2023-02-01"
+categories: [Data Visualization, Tableau]
+---
+
+## Tableau Public - Data Visualization - Game of Thrones
+
+::: columns
+::: {.column width="55%"}
+This dashboard presents a detailed analysis of deaths in the "Game of Thrones" series, complete with visual representations and statistics. Who is the deadliest character or House and who has fallen victim to them? What is their weapon of choice? Get ready to relive some of the most iconic moments and discover new insights into the grim reality of life in Westeros. [Link to dashboard](https://public.tableau.com/app/profile/sachiko.morrison/viz/MakeoverMondayCourseraGoT/Dashboard1?publish=yes)
+
+This dashboard was completed for my Fundamentals of Visualization with Tableau course project in Coursera. Data is from [#MakoverMonday](https://data.world/makeovermonday/2019w27)
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="40%"}
+![](GoT_Dashboard.png)
+:::
+:::

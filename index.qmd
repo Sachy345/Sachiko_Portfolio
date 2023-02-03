@@ -1,0 +1,25 @@
+---
+title: "Sachiko Morrison"
+image: DSC06921.jpg
+about:
+  template: jolla
+  image-width: 20em
+  image-shape: round
+  links:
+    - icon: linkedin
+      text: LinkedIn
+      href: www.linkedin.com/in/sachy345/
+    - icon: github
+      text: Github
+      href: https://github.com/Sachy345
+    - icon: twitter
+      text: Twitter
+      href: https://twitter.com/sachy345
+    - icon: envelope
+      text: Contact Me
+      href: mailto:sachy345@gmail.com
+---
+
+I graduated from San Diego State University with a BS in Statistics with an emphasis in Actuarial Science. I've spent the last six years in the mortgage industry but looking to break into the world of data to finally put my hard earned degree to use.
+
+I'm very familiar with R and have expanded my skill set to include SQL and Tableau. I'm no stranger with handling multiple deadlines and being able to pivot my attention to different projects throughout the day without losing my eye for detail. I strive to continually grow my knowledge base and enjoy working with others. I'm always opened to connect with newbies like myself and more seasoned professionals willing to give tips, trick, and advice.

@@ -1,0 +1,88 @@
+---
+title: "Toothgrowth Analysis"
+author: "Sachiko Morrison"
+date: "2023-01-31"
+categories: [R, analysis, plot]
+image: "toothgrowth.png"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Overview
+
+This is the second portion of the Coursera Statistical Inference course project. We will analyze the ToothGrowth data in the R datasets package to determine if the Vitmain C has an effect on tooth growth in guinea pigs.
+
+## 1) Loading ToothGrowth dataset and performing basic exploratory data analyis
+
+```{r}
+library(datasets)
+data("ToothGrowth")
+str(ToothGrowth)
+```
+
+Need to convert dose variable
+
+```{r}
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
+str(ToothGrowth)
+
+hist(ToothGrowth$len, freq = FALSE, ylim = c(0.00, 0.06))
+
+curve(dnorm(x, mean = mean(ToothGrowth$len), 
+            sd = sd(ToothGrowth$len)), add = TRUE, col = "blue")
+```
+
+## 2) Basic summary of ToothGrowth dataset
+
+```{r, out.width="90%"}
+summary(ToothGrowth)
+
+library(ggplot2)
+ggplot(ToothGrowth, aes(x = supp, y = len)) +
+    geom_boxplot(aes()) +
+    labs(title = "Tooth Length v. Dose Amount", 
+         x = "Supplement Type", y = "Tooth Length")
+
+ggplot(ToothGrowth, aes(x = dose, y = len)) +
+    geom_boxplot(aes()) +
+    labs(title = "Tooth Length v. Supplement Type", 
+         x = "Dose Amount", y = "Tooth Length")
+```
+
+## 3) Using Confidence Interval and T-Test to compare tooth growth by supp and dose
+
+It appears the dataset is fairly normal. With this smaller dataset, we'll be using T-Test to test if delivery method and/or dose amount affects tooth growth
+
+### Hypothesis 1: Vitamin C and Orange Juice result in same tooth growth
+
+```{r}
+t.test(len ~ supp, paired = FALSE, var.equal = TRUE, data = ToothGrowth)
+```
+
+The 95% confidence interval includes 0 and the p-value is greater than 0.05 therefore we fail to reject the null hypothesis that vitamin C and orange juice result in the same amount of tooth growth.
+
+### Hypothesis 2: Increasing dose amount results in same tooth growth
+
+```{r}
+TGdose05_1 <- subset(ToothGrowth, dose %in% c(0.5, 1))
+TGdose1_2 <- subset(ToothGrowth, dose %in% c(1, 2))
+TGdose2_05 <- subset(ToothGrowth, dose %in% c(2, 0.5))
+
+#95% Confidence Intervals
+rbind(t.test(len ~ dose, paired = FALSE, var.equal = TRUE, data = TGdose05_1)$conf,
+      t.test(len ~ dose, paired = FALSE, var.equal = TRUE, data = TGdose1_2)$conf,
+      t.test(len ~ dose, paired = FALSE, var.equal = TRUE, data = TGdose2_05)$conf)
+
+#P-Values
+rbind(t.test(len ~ dose, paired = FALSE, var.equal = TRUE, data = TGdose05_1)$p.value,
+      t.test(len ~ dose, paired = FALSE, var.equal = TRUE, data = TGdose1_2)$p.value,
+      t.test(len ~ dose, paired = FALSE, var.equal = TRUE, data = TGdose2_05)$p.value)
+```
+
+All three 95% confidence intervals do not contain 0 and all three P-Values are essentially 0 therefore we reject the null hypothesis that increasing the dosage will result in the same amount of tooth growth.
+
+## 4) Conclusion
+
+Working with the assumptions that the data is iid normal and variance is equal we can conclude that the supplement delivery (vitamin C or orange juice) has no affect on tooth growth. However, increasing dosage amount, regardless of delivery method, appears to result in increase tooth growth
